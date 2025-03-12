@@ -17,11 +17,13 @@
 
     <script>
         function fetchStatuses() {
-            fetch('http://localhost:8080/status') // Call Java API
+            // Call Java API
+            fetch('http://localhost:8080/status')
                 .then(response => response.json())
                 .then(data => {
                     let container = document.getElementById("status-container");
-                    container.innerHTML = ""; // Clear previous results
+                    // Clear previous results
+                    container.innerHTML = "";
 
                     Object.entries(data).forEach(([pid, status]) => {
                         let row = document.createElement("div");
@@ -35,7 +37,8 @@
         }
 
         window.onload = fetchStatuses;
-        setInterval(fetchStatuses, 5000); // Refresh every 5 seconds
+        // Refresh every 5 seconds
+        setInterval(fetchStatuses, 5000); 
     </script>
 </body>
 </html>

@@ -50,6 +50,7 @@ public class ServerstatuscheckerApplication {
     }
 
     static String checkProcess(int processID) {
+        // Check if the process is runnning using the ProcessHandle and return the status based on that
         boolean isRunning = ProcessHandle.allProcesses().map(ProcessHandle::pid).anyMatch(pid -> pid == processID);
         return isRunning ? "UP" : "DOWN";
     }
@@ -59,6 +60,7 @@ public class ServerstatuscheckerApplication {
         Map<String, String> output = new LinkedHashMap<>();
         Map<Integer, String> pidMap = getPIDMap();
 
+        // Convert the hashmap with the PID into a a Hashmap with the data for the html display
         for (Map.Entry<Integer, String> entry : pidMap.entrySet()) {
             int pid = entry.getKey();
             String processName = entry.getValue();
