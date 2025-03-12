@@ -3,8 +3,9 @@ package com.acaimingus.serverstatuschecker;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.boot.SpringApplication;
@@ -16,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ServerstatuscheckerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ServerstatuscheckerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ServerstatuscheckerApplication.class, args);
+    }
 
-	    static List<Integer> getPIDList() {
+    static Map<Integer, String> getPIDMap() {
         try {
             // Get all lines from the pid file
             List<String> lines = Files.readAllLines(Paths.get("src/main/resources/pidlist.txt"));
@@ -28,20 +29,23 @@ public class ServerstatuscheckerApplication {
             // Trim whitespace
             lines.replaceAll(String::trim);
 
-            // Create a list of pids and convert the lines-list into the pid list
-            List<Integer> pids = new ArrayList<>();
-            for (int i = 0; i < lines.size(); i++) {
+            // Create a map with the names of the processes and the PIDs and populate valid entries
+            Map<Integer, String> output = new LinkedHashMap<>();
+            for (int i = 0; i < lines.size() - 1; i += 2) {
+                String processName = lines.get(i);
                 try {
-                    pids.add(Integer.parseInt(lines.get(i)));
+                    int pid = Integer.parseInt(lines.get(i+1));
+                    output.put(pid, processName);
                 } catch (NumberFormatException e) {
-                    System.err.println("Line " + i + " failed to parse to int: " + e.getMessage());
+                    System.err.println("Process " + processName + ": Failed to parse PID: " + e.getMessage());
                 }
             }
-
-            return pids;
+            // Return the map
+            return output;
         } catch (IOException e) {
+            // File was not found, inform user and return an empty map
             System.err.println("Couldn't read the pids: " + e.getMessage());
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
     }
 
@@ -50,15 +54,17 @@ public class ServerstatuscheckerApplication {
         return isRunning ? "UP" : "DOWN";
     }
 
-	@GetMapping("/status")
-	static List<String> getProcessStatuses() {
-		List<String> output = new ArrayList<>();
-		List<Integer> pids = getPIDList();
+    @GetMapping("/status")
+    static Map<String, String> getProcessStatuses() {
+        Map<String, String> output = new LinkedHashMap<>();
+        Map<Integer, String> pidMap = getPIDMap();
 
-		for (int pid : pids) {
-			output.add(checkProcess(pid));
-		}
+        for (Map.Entry<Integer, String> entry : pidMap.entrySet()) {
+            int pid = entry.getKey();
+            String processName = entry.getValue();
+            output.put(processName + "(" + pid + ")", checkProcess(pid)); 
+        }
 
-		return output;
-	}
+        return output;
+    }
 }

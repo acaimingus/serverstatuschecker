@@ -25,7 +25,7 @@
 
                     Object.entries(data).forEach(([pid, status]) => {
                         let row = document.createElement("div");
-                        row.innerHTML = `<div>Process ${pid}:</div> <div class="${status.toLowerCase()}">${status}</div>`;
+                        row.innerHTML = `<div>${pid}:</div> <div class="${status.toLowerCase()}">${status}</div>`;
                         container.appendChild(row);
                     });
 
