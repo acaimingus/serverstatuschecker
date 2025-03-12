@@ -1,0 +1,58 @@
+body
+{
+    background-color: #262626;
+    color: #F5F5F5;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+}
+
+header
+{
+    background-color: #604CC3;
+    color: #F5F5F5;
+    width: 100%;
+    height: 100px;
+    align-content: center;
+}
+
+.webpagetitle
+{
+    margin-left: 20px;
+    font-size: 40px;
+}
+
+.grid-container
+{
+    margin: 20px;
+    font-size: 20px;
+    align-content: right;
+    display: grid;
+    flex-direction: row;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-column-end: 1;
+}
+
+.up
+{
+    color: #8FD14F;
+}
+
+.down
+{
+    color: #FF6600;
+}
+
+.checking
+{
+    color: #F5F5F5;
+}
+
+.elapsedtext
+{
+    color: #F5F5F5;
+    margin-left: 20px;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+}

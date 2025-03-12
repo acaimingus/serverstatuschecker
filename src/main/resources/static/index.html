@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Status</title>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+</head>
+<body>
+    <header>
+        <h1 class="webpagetitle">Server Status</h1>
+    </header>
+    <div class="grid-container" id="status-container">
+        <!-- Process statuses will be added here -->
+    </div>
+    <p class="elapsedtext">Last checked: <span id="timestamp">Just now</span></p>
+
+    <script>
+        function fetchStatuses() {
+            fetch('http://localhost:8080/status') // Call Java API
+                .then(response => response.json())
+                .then(data => {
+                    let container = document.getElementById("status-container");
+                    container.innerHTML = ""; // Clear previous results
+
+                    Object.entries(data).forEach(([pid, status]) => {
+                        let row = document.createElement("div");
+                        row.innerHTML = `<div>Process ${pid}:</div> <div class="${status.toLowerCase()}">${status}</div>`;
+                        container.appendChild(row);
+                    });
+
+                    document.getElementById("timestamp").textContent = new Date().toLocaleTimeString();
+                })
+                .catch(error => console.error("Error fetching process status:", error));
+        }
+
+        window.onload = fetchStatuses;
+        setInterval(fetchStatuses, 5000); // Refresh every 5 seconds
+    </script>
+</body>
+</html>
