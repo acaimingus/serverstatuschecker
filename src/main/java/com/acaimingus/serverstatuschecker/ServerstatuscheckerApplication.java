@@ -17,14 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ServerstatuscheckerApplication {
 
+    private static String pidFilePath;
+
     public static void main(String[] args) {
+        if (args.length == 0) {
+            System.err.println("You need to specify a file with the processes to monitor as an argument!");
+            System.exit(1);
+        }
+        pidFilePath = args[0];
+
         SpringApplication.run(ServerstatuscheckerApplication.class, args);
     }
 
-    static Map<Integer, String> getPIDMap() {
+    static Map<Integer, String> getPIDMap(String filePath) {
         try {
             // Get all lines from the pid file
-            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/pidlist.txt"));
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
 
             // Trim whitespace
             lines.replaceAll(String::trim);
@@ -58,7 +66,7 @@ public class ServerstatuscheckerApplication {
     @GetMapping("/status")
     static Map<String, String> getProcessStatuses() {
         Map<String, String> output = new LinkedHashMap<>();
-        Map<Integer, String> pidMap = getPIDMap();
+        Map<Integer, String> pidMap = getPIDMap(pidFilePath);
 
         // Convert the hashmap with the PID into a a Hashmap with the data for the html display
         for (Map.Entry<Integer, String> entry : pidMap.entrySet()) {

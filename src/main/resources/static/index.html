@@ -13,7 +13,7 @@
     <div class="grid-container" id="status-container">
         <!-- Process statuses will be added here -->
     </div>
-    <p class="elapsedtext">Last checked: <span id="timestamp">Just now</span></p>
+    <p class="elapsedtext">Last checked: <span id="timestamp"></span></p>
 
     <script>
         function fetchStatuses() {
@@ -31,14 +31,17 @@
                         container.appendChild(row);
                     });
 
-                    document.getElementById("timestamp").textContent = new Date().toLocaleTimeString();
+                    let now = new Date();
+                    let hours = now.getHours().toString();
+                    let minutes = now.getMinutes().toString();
+                    document.getElementById("timestamp").textContent = `${hours}:${minutes}`;
                 })
                 .catch(error => console.error("Error fetching process status:", error));
         }
 
         window.onload = fetchStatuses;
-        // Refresh every 5 seconds
-        setInterval(fetchStatuses, 5000); 
+        // Refresh every minute 
+        setInterval(fetchStatuses, 60000); 
     </script>
 </body>
 </html>
