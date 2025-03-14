@@ -15,34 +15,38 @@ header
     align-content: center;
 }
 
+/* CSS class for the webpage title "Server Status" */
 .webpagetitle
 {
     margin-left: 20px;
     font-size: 40px;
 }
 
+/* CSS class for the container for the process items */
 .grid-container
 {
     margin: 20px;
     font-size: 20px;
     align-content: right;
     display: grid;
-    flex-direction: row;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     grid-column-end: 1;
 }
 
+/* Color if the process is online */
 .up
 {
     color: #8FD14F;
 }
 
+/* Color if the process is offline */
 .down
 {
     color: #FF6600;
 }
 
+/* CSS class for the timestamp at the bottom */
 .elapsedtext
 {
     color: #F5F5F5;

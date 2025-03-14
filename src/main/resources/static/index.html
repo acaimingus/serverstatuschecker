@@ -26,12 +26,14 @@
             // Clear previous results
             container.innerHTML = "";
 
+            // Populate the website with the specified processess and their statuses
             Object.entries(data).forEach(([pid, status]) => {
               let row = document.createElement("div");
               row.innerHTML = `<div>${pid}:</div> <div class="${status.toLowerCase()}">${status}</div>`;
               container.appendChild(row);
             });
 
+            // Create the timestamp at the bottom
             let now = new Date();
             let hours = now.getHours().toString().padStart(2, "0");
             let minutes = now.getMinutes().toString().padStart(2, "0");
@@ -44,6 +46,8 @@
           );
       }
 
+      // Get the status of the processes when the website loads
+      // Possibly should be improved in the future, this will call everytime someone refreshes the page
       window.onload = fetchStatuses;
       // Refresh every minute
       setInterval(fetchStatuses, 60000);

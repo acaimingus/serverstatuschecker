@@ -16,19 +16,32 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class ServerstatuscheckerApplication {
-
+    /** String that holds the path to the file with the processes to monitor */
     private static String pidFilePath;
 
+    /**
+     * Main method, checks if the user specified a path and then runs the Spring server
+     * @param args Pass the path as the first argument here, rest doesn't matter
+     */
     public static void main(String[] args) {
+        // Check if the user specified an argument
         if (args.length == 0) {
             System.err.println("You need to specify a file with the processes to monitor as an argument!");
             System.exit(1);
         }
+
+        // Treat the first argument as a path
         pidFilePath = args[0];
 
+        // Start Spring
         SpringApplication.run(ServerstatuscheckerApplication.class, args);
     }
 
+    /**
+     * Method to create a map wit PIDs and corresponding names to pass to the web server
+     * @param filePath Path of the file with the PIDs you wish to be monitored
+     * @return Map with PIDs as the key and names as the value
+     */
     static Map<Integer, String> getPIDMap(String filePath) {
         try {
             // Get all lines from the pid file
@@ -57,21 +70,33 @@ public class ServerstatuscheckerApplication {
         }
     }
 
+    /**
+     * Small helper method that checks if the specified process ID is running on the system
+     * @param processID the given process ID
+     * @return string for the HTML specifying the process state
+     */
     static String checkProcess(int processID) {
         // Check if the process is runnning using the ProcessHandle and return the status based on that
         boolean isRunning = ProcessHandle.allProcesses().map(ProcessHandle::pid).anyMatch(pid -> pid == processID);
         return isRunning ? "UP" : "DOWN";
     }
 
+    /**
+     * Method called by the websites JavaScript to check it's PID list for the corresponding statuses
+     * @return List with the data to be displayed on the website
+     */
     @GetMapping("/status")
     static Map<String, String> getProcessStatuses() {
+        // Map that will be used to output the given data
         Map<String, String> output = new LinkedHashMap<>();
+        // Map of processes to monitor given in the configuration file
         Map<Integer, String> pidMap = getPIDMap(pidFilePath);
 
         // Convert the hashmap with the PID into a a Hashmap with the data for the html display
         for (Map.Entry<Integer, String> entry : pidMap.entrySet()) {
             int pid = entry.getKey();
             String processName = entry.getValue();
+            // Put the Name + PID as key and put the status as the value
             output.put(processName + "(" + pid + ")", checkProcess(pid)); 
         }
 
