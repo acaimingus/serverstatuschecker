@@ -2,6 +2,7 @@ package com.acaimingus.serverstatuschecker;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
@@ -27,6 +28,13 @@ public class ServerstatuscheckerApplication {
         // Check if the user specified an argument
         if (args.length == 0) {
             System.err.println("You need to specify a file with the processes to monitor as an argument!");
+            System.exit(1);
+        }
+
+        // Check if the user specified a valid path
+        Path path = Path.of(args[0]);
+        if (!Files.exists(path)) {
+            System.err.println("The specified argument is not a path!");
             System.exit(1);
         }
 
