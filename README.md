@@ -50,3 +50,7 @@ server.ssl.key-alias=KEY-NAME
 ```
 - Change the port from `443` in `application.properties` to another one (for example `8080`)
 - Start the script without sudo (not needed here). The script will ask you for the path to the PID file and then launch the site.
+
+## Generating the PID list
+
+My use case for this program was to monitor my servers running through the UNIX screen window manager. For that use case there's a script `generatepidlist.sh`, which takes all detached screens and puts them into a file called `pidlist.txt`.
