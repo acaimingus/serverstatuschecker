@@ -55,6 +55,6 @@ server.ssl.key-alias=KEY-NAME
 
 My use case for this program was to monitor my servers running through the UNIX screen window manager. For that use case there's a script `generatepidlist.sh`, which takes all detached screens and puts them into a file called `pidlist.txt`.
 
-# Example
+## Example
 
 ![Website screenshot](example.png)
