@@ -10,4 +10,4 @@ read -e -p "Please specify the PID file path: " PIDPATHVAR
 # Echo the user his input
 echo The specified path was: $PIDPATHVAR
 # Run the program
-java -jar "$SCRIPT_DIR/serverstatuschecker.jar" $PIDPATHVAR --spring.config.location="$SCRIPT_DIR/application.properties"
+java -jar $SCRIPT_DIR/serverstatuschecker.jar $PIDPATHVAR --spring.config.location=$SCRIPT_DIR/application.properties
